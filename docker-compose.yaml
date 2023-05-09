@@ -1,0 +1,42 @@
+version: '3.11'
+
+services:
+  db:
+    image: kartoza/postgis:13.0
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=smartcity
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  backend:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000 --insecure
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code/backend
+    environment:
+      - POSTGRES_NAME=smartcity
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    env_file:
+      - .env
+    depends_on:
+      - db
+  frontend:
+    build: ./frontend
+    command: npm start -- --host
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/code/frontend
+    depends_on:
+      - backend
+volumes:
+  postgres_data:
+networks:
+  backend:
+     driver: bridge
+  frontend:
+     driver: bridge

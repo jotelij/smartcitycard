@@ -1,0 +1,17 @@
+.vscode
+
+.venv
+venv
+env
+.env
+
+Dockerfile
+docker-compose_alt.yaml
+
+.git
+.gitignore
+
+Makefille
+
+# fronend
+frontend
